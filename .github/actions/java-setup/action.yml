@@ -1,0 +1,18 @@
+name: 'Java Setup Action'
+description: 'Sets up Java environment'
+
+inputs:
+  java-version:
+    description: 'Java version'
+    required: true
+    default: '17'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: 'temurin'
+        cache: 'gradle'
