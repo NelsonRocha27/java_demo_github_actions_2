@@ -56,31 +56,31 @@ jobs:
           name: test-results
           path: build/reports/tests/test/
 
-  #owasp:
-  #  runs-on: ubuntu-latest
-  #  needs: test
-#
- #   steps:
-  #    - uses: actions/checkout@v4
-#
- #     - name: Setup Java
-  #      uses: actions/setup-node@v4
-   #     with:
-    #      java-version: '17'
-     #     distribution: 'temurin'
-#
- #     - name: Setup Gradle
-  #      uses: gradle/actions/setup-gradle@v3
-   #     with:
-    #      gradle-version: '8.5'
-#
- #     - run: gradle dependencyCheckAnalyze
-#
- #     - name: Upload OWASP Reports
-  #      uses: actions/upload-artifact@v4
-   #     with:
-    #      name: owasp-reports
-     #     path: build/reports/dependency-check-report.html
+  owasp:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-node@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
+      - run: gradle dependencyCheckAnalyze
+
+      - name: Upload OWASP Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-reports
+          path: build/reports/dependency-check-report.html
 
   build:
       runs-on: ubuntu-latest
