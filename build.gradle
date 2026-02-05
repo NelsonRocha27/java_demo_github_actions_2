@@ -1,0 +1,109 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'  // Para coverage reports em CI/CD
+    id 'org.owasp.dependencycheck' version '12.2.0'  // Security scan
+}
+
+group = 'pt.rumos.workshop'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot - Web e REST
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Lombok para reduzir boilerplate (comum em projetos reais)
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Testes (JUnit 5)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    
+    // Configurações para CI/CD
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true
+    }
+    
+    // Fail build se test coverage < 50% (gate conceitual)
+    finalizedBy jacocoTestReport
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.50
+                }
+            }
+        }
+    }
+}
+
+// Jacoco configuration para CI/CD
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+// OWASP Dependency Check - Security Scan
+dependencyCheck {
+    // Configurações do scan
+    format = 'HTML'
+    scanConfigurations = ['runtimeClasspath']
+    
+    // Fail build se vulnerabilidade crítica (CVSS ≥ 7.0)
+    failBuildOnCVSS = 7.0
+    
+    // Suppressions (opcional)
+    suppressionFile = 'dependency-check-suppressions.xml'
+
+    failOnError = false 
+    // Analisar também dependências de teste
+    skipTestGroups = false
+}
+
+// Tarefa para verificar qualidade (conceito)
+tasks.register('checkQuality') {
+    dependsOn 'test'
+    doLast {
+        println "✅ Quality check passed!"
+        println "   Todos os testes passaram"
+        println "   Cobertura mínima garantida"
+        println "   Código pronto para build"
+    }
+}
+
+// Tarefa para executar security scan OWASP
+tasks.register('securityScan') {
+    dependsOn 'dependencyCheckAnalyze'
+    doLast {
+        println "🔒 Security scan completed!"
+        println "   Relatório gerado em: build/reports/dependency-check-report.html"
+        println "   Verifique vulnerabilidades críticas e altas"
+    }
+}

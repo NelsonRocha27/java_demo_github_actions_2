@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: workshop-cicd
+  profiles:
+    active: development
+
+  # Configuração de actuator para CI/CD
+  # Importante: Health checks são essenciais em pipelines
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics
+    endpoint:
+      health:
+        show-details: always
+
+server:
+  port: 8080
+
+# Configurações customizadas para CI/CD
+app:
+  version: 1.0.0
+
+# Logging (útil para debug de pipelines)
+logging:
+  level:
+    pt.rumos.workshop.cicd: INFO
+    org.springframework.web: INFO
+
+---
+# Profile: Desenvolvimento (default)
+spring:
+  config:
+    activate:
+      on-profile: development
+
+logging:
+  level:
+    pt.rumos.workshop.cicd: DEBUG
+
+---
+# Profile: Test
+spring:
+  config:
+    activate:
+      on-profile: test
+
+logging:
+  level:
+    pt.rumos.workshop.cicd: WARN
+
+---
+# Profile: Staging
+spring:
+  config:
+    activate:
+      on-profile: staging
+
+app:
+  environment: staging
+
+---
+# Profile: Production
+spring:
+  config:
+    activate:
+      on-profile: production
+
+app:
+  environment: production
+
+# Production tem logging mais leve
+logging:
+  level:
+    pt.rumos.workshop.cicd: INFO
+    org.springframework: WARN
