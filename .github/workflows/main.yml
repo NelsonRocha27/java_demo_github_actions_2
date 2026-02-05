@@ -44,6 +44,25 @@ jobs:
 
       - run: gradle test
 
+  owasp:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-node@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
+      - run: gradle dependencyCheckAnalyze --info
 
   build:
       runs-on: ubuntu-latest
