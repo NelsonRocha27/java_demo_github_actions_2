@@ -13,6 +13,7 @@ jobs:
       - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
+          gradle-version: '8.5'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -36,6 +37,7 @@ jobs:
       - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
+          gradle-version: '8.5'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -59,10 +61,6 @@ jobs:
       - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
           gradle-version: '8.5'
 
       - run: gradle dependencyCheckAnalyze
@@ -82,6 +80,7 @@ jobs:
         - uses: ./.github/actions/java-setup
           with:
             java-version: '17'
+            gradle-version: '8.5'
   
         - name: Setup Gradle
           uses: gradle/actions/setup-gradle@v3
