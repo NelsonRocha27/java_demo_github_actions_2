@@ -24,6 +24,12 @@ jobs:
 
       - run: gradle check
 
+      - name: Upload Lint Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: build/reports/lint/lint-results.html
+
   test:
     runs-on: ubuntu-latest
     needs: lint
@@ -43,6 +49,12 @@ jobs:
           gradle-version: '8.5'
 
       - run: gradle test
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: build/reports/tests/test-results.html
 
   owasp:
     runs-on: ubuntu-latest
@@ -64,9 +76,14 @@ jobs:
 
       - run: gradle dependencyCheckAnalyze --info
 
+      - name: Upload OWASP Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-reports
+          path: build/reports/dependency-check-report.html
   build:
       runs-on: ubuntu-latest
-      needs: test
+      needs: owasp
   
       steps:
         - uses: actions/checkout@v4
