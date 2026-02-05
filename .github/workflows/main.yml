@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
@@ -32,12 +33,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
-          distribution: 'temurin'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -58,12 +56,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/java-setup
         with:
           java-version: '17'
-          distribution: 'temurin'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -84,12 +79,9 @@ jobs:
   
       steps:
         - uses: actions/checkout@v4
-  
-        - name: Setup Java
-          uses: actions/setup-node@v4
+        - uses: ./.github/actions/java-setup
           with:
             java-version: '17'
-            distribution: 'temurin'
   
         - name: Setup Gradle
           uses: gradle/actions/setup-gradle@v3
